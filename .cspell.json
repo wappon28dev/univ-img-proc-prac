@@ -1,4 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-  "words": ["univ-img-proc-prac", "imread", "imshow"]
+  "words": [
+    "imread",
+    "imshow",
+    "imwrite",
+    "univ-img-proc-prac"
+  ]
 }

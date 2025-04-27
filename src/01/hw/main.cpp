@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <opencv2/opencv.hpp>
 
 #define FILE_NAME "./me@2024-04-11.png"
