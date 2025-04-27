@@ -30,7 +30,7 @@ int main(int argc, const char *argv[])
     color = cv::Vec3b(color[2], color[0], color[1]);
   });
 
-  cv::imwrite(DIR_NAME_OUTPUT "swapped.png", output);
+  cv::imwrite(DIR_NAME_OUTPUT "swapped.jpg", output);
 
   return 0;
 }

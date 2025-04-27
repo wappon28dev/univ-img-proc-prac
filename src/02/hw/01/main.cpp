@@ -5,7 +5,6 @@
 #define DIR_NAME_OUTPUT "./out/"
 
 #define SAMPLING_SIZE_PX 10
-#define COLOR_LEVEL 8
 
 cv::Mat sample(const cv::Mat &input)
 {
@@ -38,11 +37,11 @@ cv::Mat sample(const cv::Mat &input)
 ///   ```
 ///   と表すことができる.
 /// @see: https://docs.opencv.org/2.4/modules/core/doc/basic_structures.html#vec
-cv::Vec3b quantize_color(const cv::Vec3b &color)
+cv::Vec3b quantize_color(const cv::Vec3b &color, uint8_t level)
 {
-  auto calc = [](u_int8_t value) {
-    uint8_t level = value * (COLOR_LEVEL - 1) / 255;
-    return level * 255 / (COLOR_LEVEL - 1);
+  auto calc = [level](u_int8_t value) {
+    uint8_t result = value * (level - 1) / 255;
+    return result * 255 / (level - 1);
   };
 
   auto b = calc(color[0]);
@@ -53,7 +52,7 @@ cv::Vec3b quantize_color(const cv::Vec3b &color)
 }
 
 // ref: https://minus9d.hatenablog.com/entry/20130126/1359194404
-cv::Mat quantize(const cv::Mat &input)
+cv::Mat quantize(const cv::Mat &input, uint8_t level = 8)
 {
   auto cell_size = SAMPLING_SIZE_PX;
   auto output = cv::Mat(input.size(), input.type());
@@ -71,7 +70,7 @@ cv::Mat quantize(const cv::Mat &input)
 
       auto color_mean = cv::mean(cell);
       auto color = cv::Vec3b(color_mean[0], color_mean[1], color_mean[2]);
-      auto color_quantized = quantize_color(color);
+      auto color_quantized = quantize_color(color, level);
 
       cv::rectangle(output, rect, color_quantized, -1);
     }
@@ -92,9 +91,11 @@ int main(int argc, const char *argv[])
 
   auto sampled = sample(input);
   auto quantized = quantize(input);
+  auto binarized = quantize(sampled, 3);
 
-  cv::imwrite(DIR_NAME_OUTPUT "sampled.png", sampled);
-  cv::imwrite(DIR_NAME_OUTPUT "quantized.png", quantized);
+  cv::imwrite(DIR_NAME_OUTPUT "sampled.jpg", sampled);
+  cv::imwrite(DIR_NAME_OUTPUT "quantized.jpg", quantized);
+  cv::imwrite(DIR_NAME_OUTPUT "binarized.jpg", binarized);
 
   return 0;
 }
