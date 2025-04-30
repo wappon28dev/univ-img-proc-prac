@@ -5,6 +5,7 @@
     "imread",
     "imshow",
     "imwrite",
+    "posterized",
     "univ-img-proc-prac"
   ]
 }
