@@ -50,6 +50,8 @@ int main(int argc, const char *argv[])
   }
 
   cv::imwrite(DIR_NAME_OUTPUT "inverted.jpg", output);
+  cv::imshow("inverted", output);
+  cv::waitKey(0);
 
   return 0;
 }

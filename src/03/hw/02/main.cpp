@@ -74,7 +74,10 @@ int main(int argc, const char *argv[])
     }
 
     cv::imwrite(DIR_NAME_OUTPUT "posterized-" + std::to_string(level) + ".jpg", output);
+    cv::imshow("Posterized " + std::to_string(level), output);
   }
+  cv::imshow("Original", input);
+  cv::waitKey(0);
 
   return 0;
 }
