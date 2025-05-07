@@ -5,6 +5,7 @@
     "imread",
     "imshow",
     "imwrite",
+    "kagoshima",
     "posterized",
     "univ-img-proc-prac"
   ]
