@@ -4,40 +4,66 @@
 #define FILE_NAME_INPUT "./assets/issue1.jpg"
 #define THRESHOLD 100
 
-// ref: src/09/hw/02/main.cpp
-typedef struct ContourStat
+// ref: https://qiita.com/IgnorantCoder/items/3101d6276e9bdddf872c
+namespace vec_util
+{
+
+template <typename A, typename F> auto map(const A &v, F &&f)
+{
+  using R = std::vector<decltype(f(*v.begin()))>;
+  R y;
+  y.reserve(v.size());
+  std::transform(std::cbegin(v), std::cend(v), std::back_inserter(y), f);
+  return y;
+}
+
+template <typename A, typename F> auto filter(const A &v, F &&f)
+{
+  A y;
+  std::copy_if(std::cbegin(v), std::cend(v), std::back_inserter(y), f);
+  return y;
+}
+
+template <typename A, typename F> void for_each(const A &v, F &&f)
+{
+  std::for_each(std::cbegin(v), std::cend(v), f);
+}
+} // namespace vec_util
+
+using Contour = std::vector<cv::Point>;
+struct ContourStat
 {
   int idx;
   cv::Rect rect;
   double arc_len;
   double area;
   double circularity;
-} ContourStat;
 
-ContourStat calc_contour_stat(const int idx, const std::vector<cv::Point> &contour)
-{
-  auto rect = cv::boundingRect(contour);
-  auto arc_len = cv::arcLength(contour, true);
-  auto area = cv::contourArea(contour);
-  auto circularity = (4 * M_PI * area) / (arc_len * arc_len);
+  static ContourStat from(const int idx, const Contour &contour)
+  {
+    auto rect = cv::boundingRect(contour);
+    auto arc_len = cv::arcLength(contour, true);
+    auto area = cv::contourArea(contour);
+    auto circularity = (4 * M_PI * area) / (arc_len * arc_len);
 
-  return {idx, rect, arc_len, area, circularity};
-}
+    return {idx, rect, arc_len, area, circularity};
+  }
 
-void make_contour_stat(const std::vector<std::vector<cv::Point>> &contours, std::vector<ContourStat> &stats)
+  void print() const
+  {
+    auto height = static_cast<double>(rect.height);
+    auto width = static_cast<double>(rect.width);
+
+    printf("%2d: L=%10.2f, S=%10.2f, R=%.2f, H=%10.2f, W=%10.2f\n", //
+           idx, arc_len, area, circularity, height, width);
+  }
+};
+
+void make_contour_stats(std::vector<ContourStat> &stats, const std::vector<Contour> &contours)
 {
   auto idx = 0;
-  auto mapper = [&idx](const std::vector<cv::Point> &contour) { return calc_contour_stat(idx++, contour); };
-  std::transform(contours.begin(), contours.end(), std::back_inserter(stats), mapper);
-}
-
-void print_contours_stat(const ContourStat &stat)
-{
-  auto height = static_cast<double>(stat.rect.height);
-  auto width = static_cast<double>(stat.rect.width);
-
-  printf("%2d: L=%10.2f, S=%10.2f, R=%.2f, H=%10.2f, W=%10.2f\n", //
-         stat.idx, stat.arc_len, stat.area, stat.circularity, height, width);
+  auto mapper = [&idx](const Contour &contour) { return ContourStat::from(idx++, contour); };
+  stats = vec_util::map(contours, mapper);
 }
 
 int main(int argc, const char *argv[])
@@ -71,32 +97,27 @@ int main(int argc, const char *argv[])
   }
 
   auto stats = std::vector<ContourStat>();
-  make_contour_stat(contours, stats);
+  make_contour_stats(stats, contours);
 
-  auto stats_circle = std::vector<ContourStat>();
-  {
-    auto pred = [](const ContourStat &stat) { return stat.circularity > 0.8; };
-    std::copy_if(stats.begin(), stats.end(), std::back_inserter(stats_circle), pred);
-  }
+  auto stats_circle = vec_util::filter(stats, [](const auto &stat) { return stat.circularity > 0.8; });
 
   // 円と検出されたものを黒で塗りつぶす
   auto black = cv::Scalar(0, 0, 0);
-  std::for_each(stats_circle.begin(), stats_circle.end(), [&](const ContourStat &stat) {
-    cv::drawContours(output_without_circle, contours, stat.idx, black, -1);
-  });
+  vec_util::for_each(stats_circle,
+                     [&](const auto &stat) { cv::drawContours(output_without_circle, contours, stat.idx, black, -1); });
 
   auto contours_without_circle = std::vector<std::vector<cv::Point>>();
   cv::findContours(output_without_circle, contours_without_circle, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
 
   auto stats_without_circle = std::vector<ContourStat>();
-  make_contour_stat(contours_without_circle, stats_without_circle);
+  make_contour_stats(stats_without_circle, contours_without_circle);
 
   // 面積の大きい順にソート
   auto stats_merged_sorted = stats_without_circle;
   {
     auto cmp = [](const ContourStat &a, const ContourStat &b) { return a.area > b.area; };
     std::sort(stats_merged_sorted.begin(), stats_merged_sorted.end(), cmp);
-    std::for_each(stats_merged_sorted.begin(), stats_merged_sorted.end(), print_contours_stat);
+    vec_util::for_each(stats_merged_sorted, [](const auto &stat) { stat.print(); });
   }
 
   // マゼンダ ... 最も面積が大きい, 赤色 ... 次に面積が大きい
