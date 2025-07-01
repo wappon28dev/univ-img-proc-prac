@@ -17,10 +17,10 @@ template <typename A, typename F> auto map(const A &v, F &&f)
   return y;
 }
 
-template <typename A, typename F> auto filter(const A &v, F &&f)
+template <typename A, typename F> auto filter(const A &v, F &&pred)
 {
   A y;
-  std::copy_if(std::cbegin(v), std::cend(v), std::back_inserter(y), f);
+  std::copy_if(std::cbegin(v), std::cend(v), std::back_inserter(y), pred);
   return y;
 }
 
