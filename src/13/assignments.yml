@@ -1,0 +1,723 @@
+- l2:
+    - a1:
+        - sourceName: "02_02_colors_k24132.cpp"
+        - description: -|
+            `aquarium.jpg` を入力して, RGB 成分を以下のルールで入れ替えよ.
+
+            - R → B
+            - B → G
+            - G → R
+        - input:
+            - "aquarium.jpg"
+        - output:
+            - "02_02_colors_学籍番号.jpg"
+        - requirements:
+            - "新しい変数 `cv::Vec3b output_val` を用いる"
+        - checklists:
+            - "画像全体の色調が変化し、特に緑とマゼンタ（赤紫色）が目立つようになっている"
+            - "元画像で青色だった水の部分が、緑色に変化している"
+            - "元画像で黄色だった魚が、マゼンタ（赤紫色）に変化している"
+            - "元画像で紫色だったサンゴが、シアン（青緑色）やマゼンタが混ざったような色合いに変化している"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::imwrite"
+            - "cv::Vec3b"
+            - "std::cerr"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            `assignments--raw.md` では「課題2」と記載されているが、この回のプログラミング課題としては唯一のため `a1` として扱う。
+- l3:
+    - a1:
+        - sourceName: "03_01_negaposi_k24132.cpp"
+        - description: -|
+            `sakura.jpg` をカラー画像として読み込み, 一回の画像走査 (二重ループ) でグレースケール変換とネガポジ変換を同時に実施するプログラムを作成せよ.
+        - input:
+            - "sakura.jpg"
+        - output:
+            - "inverted.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "一回の画像走査（二重ループ）で処理を完結させる"
+            - "ネガポジ変換には変換式を用いる（LUTは使用しない）"
+        - checklists:
+            - "出力画像がグレースケールになっている"
+            - "出力画像の明暗が反転している"
+            - "元画像で明るかった空や桜が黒っぽくなっている"
+            - "元画像で暗かった木の幹や影が白っぽくなっている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imwrite"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::saturate_cast"
+            - "std::tuple"
+            - "std::make_tuple"
+        - note: -|
+            特になし
+    - a2:
+        - sourceName: "03_02_LUT_k24132.cpp"
+        - description: -|
+            階調数を指定すると, その階調数に対応したLUTを作成し, そのLUTを用いてポスタリゼーションを行うプログラムを作成せよ.
+        - input:
+            - "apple_tree.jpg"
+        - output:
+            - "posterized-2.jpg"
+            - "posterized-3.jpg"
+            - "posterized-4.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "階調数をプログラム内で指定できる"
+            - "指定された階調数に基づいてルックアップテーブル (LUT) を生成する"
+            - "生成したLUTを用いてポスタリゼーション処理を行う"
+            - "結果画像では, 指定した階調数がわかるように表示する"
+        - checklists:
+            - "元のカラー画像がグレースケールに変換されている"
+            - "指定された階調数に応じたポスタリゼーションが適用されている"
+            - "階調数が少ない（例: 2）ほど、白黒の二値画像に近くなる"
+            - "階調数が多くなるにつれて、元のグレースケール画像に近い表現になる"
+            - "複数の階調数での結果が同時に表示されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imwrite"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::saturate_cast"
+            - "std::vector"
+            - "std::tuple"
+            - "std::make_tuple"
+            - "std::min"
+            - "std::to_string"
+        - note: -|
+            この課題は提出自由の加点対象である.
+- l4:
+    - a1:
+        - sourceName: "04_01_bin_k24132.cpp"
+        - description: -|
+            `image1.jpg` をグレースケールで読み込み, ヒストグラムを作成して閾値を決定する. その後, 決定した閾値を用いて画像を二値化し, 部品領域 (物体) を白, 背景を黒で表示せよ.
+        - input:
+            - "image1.jpg"
+        - output:
+            - "output.jpg"
+            - "<CONSOLE_OUTPUT>"
+        - requirements:
+            - "画像をグレースケールで読み込む"
+            - "画像の輝度ヒストグラムをまず作成する"
+            - "ヒストグラムを目視で確認し, 物体と背景を分離するための閾値を決定する"
+            - "決定した閾値を使って, 物体を白 (255), 背景を黒 (0) に二値化する"
+        - checklists:
+            - "最終的な出力画像が白黒の二値画像になっている"
+            - "部品の形状が白で、背景が黒で塗りつぶされている"
+            - "ヒストグラム作成プログラムのコンソール出力には, 明るさの分布が簡易的に表示されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imwrite"
+            - "cv::Mat"
+            - "cv::saturate_cast"
+            - "cv::forEach"
+            - "std::vector"
+        - note: -|
+            この課題はヒストグラム作成 (`04_01_hist_学籍番号.cpp`) と二値化 (`04_01_bin_学籍番号.cpp`) の2つのプログラムを提出する必要がある.
+    - a2:
+        - sourceName: "04_02_k24132.cpp"
+        - description: -|
+            `image2.jpg` を入力し, 指定された閾値 `121` を用いて部品領域の面積 (画素数) を計測し, 結果をテキストファイルに出力せよ.
+        - input:
+            - "image2.jpg"
+        - output:
+            - "count.txt"
+        - requirements:
+            - "閾値として `121` を使用する"
+            - "部品領域の面積 (画素数) を計算する"
+            - "結果を `image2=<面積値>` の形式でテキストファイルに出力する"
+        - checklists:
+            - "指定された名前でテキストファイルが生成されている"
+            - "ファイル内の記述が `image2=<計算された画素数>` の形式になっている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "std::ofstream"
+            - "std::count_if"
+            - "std::endl"
+        - note: -|
+            特になし
+- l5:
+    - a1:
+        - sourceName: "05_01_filter_k24132.cpp"
+        - description: -|
+            キーボードから整数 `n` を入力し、`apple_grayscale.jpg` に対して3x3の平均化フィルタを `n` 回繰り返し適用するプログラムを作成せよ。フィルタリングは、前の結果に対して再度フィルタをかける形で実行すること。
+        - input:
+            - "apple_grayscale.jpg"
+            - "<KEYBOARD_INPUT>"
+        - output:
+            - "05_01_filter_学籍番号_n.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "プログラム実行中に、キーボードからフィルタを適用する回数 `n` を受け付ける"
+            - "3x3の平均化フィルタを使用する"
+            - "フィルタ処理を `n` 回、結果に繰り返し適用する"
+            - "OpenCVに組み込まれている平均化関数を利用してもよい"
+        - checklists:
+            - "実行時にターミナルまたはコンソールで回数の入力を求められる"
+            - "入力した回数に応じて、フィルタ処理が適用された画像が表示される"
+            - "回数 `n` が大きいほど、出力画像のぼかしが強くなる"
+            - "元の画像と、フィルタをかけた後の画像がウィンドウに表示される"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::destroyAllWindows"
+            - "cv::Mat"
+            - "cv::filter2D"
+            - "cv::normalize"
+            - "std::vector"
+            - "std::string"
+            - "std::stringstream"
+            - "std::getline"
+            - "std::stoi"
+            - "std::cout"
+            - "std::cin"
+            - "std::to_string"
+        - note: -|
+            特になし
+    - a2:
+        - sourceName: "05_02_denoising_k24132.cpp"
+        - description: -|
+            ドット模様のノイズが含まれるグレースケール画像 `dot_gray_kanji.jpg` を入力とし、画像を平滑化するなどしてノイズを除去し、漢字「像」の画素を白(255)、それ以外の画素を黒(0)とする二値画像を生成せよ。
+        - input:
+            - "dot_gray_kanji.jpg"
+        - output:
+            - "05_02_denoising_学籍番号.jpg"
+        - requirements:
+            - "平滑化フィルタなどを用いてドットノイズを除去する"
+            - "漢字画素の画素値を255にする"
+            - "漢字以外の画素の値を0にする"
+            - "処理後の画像の境界がぼやけていても許容される"
+        - checklists:
+            - "出力画像は白と黒のみで構成されている"
+            - "白い部分が漢字の「像」の形をなしている"
+            - "背景はすべて黒で塗りつぶされている"
+            - "入力画像にあったドット状のノイズが除去されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::filter2D"
+            - "cv::normalize"
+            - "std::vector"
+            - "std::transform"
+            - "std::to_string"
+        - note: -|
+            この課題は提出自由の加点対象である。
+- l6:
+    - a1:
+        - sourceName: "06_01_UP_k24132.cpp"
+        - description: -|
+            カラー画像を入力し、その輝度値に平均化フィルタを適用する。さらに、その結果に対してプリューウィットフィルタ（縦）を施し、最終的なエッジ画像を生成・表示せよ。
+        - input:
+            - "apple_tree.jpg"
+        - output:
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "入力はカラー画像を使用する"
+            - "処理の前に輝度画像（グレースケール）に変換する必要がある"
+            - "任意のサイズの平均化フィルタを適用する"
+            - "平均化された画像に縦方向のプリューウィットフィルタを適用する"
+            - "入力画像、平均化後の画像、最終的なエッジ画像の3つを表示する"
+        - checklists:
+            - "3つのウィンドウが表示されている（入力、平均化後、エッジ）"
+            - "平均化後の画像は、入力画像をグレースケール化し、ぼかしたものになっている"
+            - "エッジ画像は、主に縦方向の輪郭が白い線で強調され、他の部分は黒くなっている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::cvtColor"
+            - "cv::filter2D"
+            - "cv::magnitude"
+            - "cv::convertScaleAbs"
+            - "std::vector"
+        - note: -|
+            課題では「平均化フィルタ」と指定されているが、提供された解答例では平滑化の一種であるガウシアンフィルタが使用されている。
+    - a2:
+        - sourceName: "06_02_gradient_k24132.cpp"
+        - description: -|
+            入力画像に対してソーベルフィルタを縦・横両方向に適用し、その結果からエッジ強度（勾配の大きさ）を計算して、エッジ強度画像を生成・表示せよ。
+        - input:
+            - "apple_tree.jpg"
+        - output:
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "縦方向と横方向のソーベルフィルタを両方使用する"
+            - "各画素のエッジ強度を `sqrt(Gx^2 + Gy^2)` で計算する"
+            - "計算結果を適切にスケーリングして表示可能な画像にする"
+            - "入力画像と、生成されたエッジ強度画像を表示する"
+        - checklists:
+            - "2つのウィンドウが表示されている（入力、エッジ強度）"
+            - "エッジ強度画像では、オブジェクトの輪郭が方向に関わらず（縦、横、斜め）白い線で表示されている"
+            - "背景は黒く、輪郭が強調されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::cvtColor"
+            - "cv::filter2D"
+            - "cv::magnitude"
+            - "cv::convertScaleAbs"
+            - "std::vector"
+        - note: -|
+            この課題は提出自由の加点対象である。
+- l7:
+    - a1:
+        - sourceName: "07_k24132.cpp"
+        - description: -|
+            「入力画像」と、それに対して何らかの加工を施した後にガウシアンフィルタでぼかした「処理画像」が与えられる 。
+            適用されたガウシアンフィルタのサイズを推定し、加工された部分を抽出して赤色で表示せよ 。
+        - input:
+            - "issue_input1.jpg"
+            - "issue_input2.jpg"
+        - output:
+            - "07_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "複数のフィルタサイズ（例: 3x3, 5x5, 7x7, 9x9）を「入力画像」に適用し、「処理画像」との差分が最も少なくなるものを最適なフィルタサイズとして推定する"
+            - "推定したフィルタサイズを用いて2枚の画像の差分を求める"
+            - "差分が大きい領域を赤色、それ以外を黒色で表示した結果画像を生成する"
+            - "ソースプログラムには処理の流れをコメント文で記載すること"
+        - checklists:
+            - "コンソールに各フィルタサイズでの差分カウントが出力されている"
+            - "入力画像、処理画像、結果画像の3つのウィンドウが表示されている"
+            - "結果画像は黒い背景に、2枚の画像の相違部分が赤色でハイライトされている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::destroyAllWindows"
+            - "cv::Mat"
+            - "cv::GaussianBlur"
+            - "cv::Vec3b"
+            - "std::vector"
+            - "std::transform"
+            - "std::min_element"
+            - "std::distance"
+            - "std::min"
+            - "std::abs"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            特になし
+    - a2:
+        - sourceName: "07_02_k24132.cpp"
+        - description: -|
+            二枚の画像の差分を求め、差分が大きい部分を赤、小さい部分を黒で表示する差分画像を生成せよ。
+        - input:
+            - "input1.jpg"
+            - "input2.jpg"
+        - output:
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "2枚の画像の対応する画素間の差分を計算する"
+            - "差分が一定の閾値以上の場合は赤色で表示する"
+            - "差分が閾値未満の場合は黒色で表示する"
+        - checklists:
+            - "入力画像2枚と出力画像の計3つのウィンドウが表示されている"
+            - "出力画像では、2枚の画像の相違部分が赤色で強調されている"
+            - "変化のない部分は黒く表示されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::saturate_cast"
+            - "cv::forEach"
+        - note: -|
+            この課題は提出自由の加点対象である。
+- l8:
+    - a1:
+        - sourceName: "08_01_ptile_k24132.cpp"
+        - description: -|
+            入力画像に対し、前景（文字）の割合が10%であるという前提のもと、pタイル法を用いて二値化処理を施せ。
+        - input:
+            - "papersample.jpg"
+        - output:
+            - "08_01_output_学籍番号.jpg"
+            - "08_01_info_学籍番号.txt"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "画像の輝度ヒストグラムを生成する"
+            - "ヒストグラムを基に、画素数の累積が全体の10%となる輝度値を閾値として計算する"
+            - "計算した閾値を用いて `cv::threshold` 関数で画像を二値化する"
+            - "算出した閾値をテキストファイルに出力する"
+        - checklists:
+            - "入力画像と二値化後の出力画像がウィンドウに表示される"
+            - "出力画像では、文字が白、背景が黒になっている"
+            - "閾値が書き込まれたテキストファイルが生成されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::threshold"
+            - "cv::Mat"
+            - "cv::saturate_cast"
+            - "std::vector"
+            - "std::accumulate"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            特になし
+    - a2:
+        - sourceName: "08_02_bin_k24132.cpp"
+        - description: -|
+            赤と緑の矩形が写った画像を入力とし、それぞれを分離した2枚の二値画像を生成せよ。また、採用したアルゴリズムをテキストファイルに記述すること。
+        - input:
+            - "red_green_rectangle.jpg"
+        - output:
+            - "08_02_output_学籍番号.jpg"
+            - "08_02_method_学籍番号.txt"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "赤色の矩形のみを抽出した二値画像を生成する"
+            - "緑色の矩形のみを抽出した二値画像を生成する"
+            - "処理に使用した手法（アルゴリズム）を説明するテキストファイルを作成する"
+            - "手法の例として、色値のヒストグラムに基づいた範囲指定による二値化が挙げられている"
+        - checklists:
+            - "入力画像、赤抽出画像、緑抽出画像の3つのウィンドウが表示される"
+            - "「赤抽出画像」では、元画像の赤い矩形の位置が白く、その他が黒く表示されている"
+            - "「緑抽出画像」では、元画像の緑の矩形の位置が白く、その他が黒く表示されている"
+            - "アルゴリズムを説明したテキストファイルが提出されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::saturate_cast"
+            - "cv::forEach"
+            - "std::vector"
+            - "std::accumulate"
+            - "std::tuple"
+            - "std::make_tuple"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            この課題は提出自由の加点対象である。
+- l9:
+    - a1:
+        - sourceName: "09_01_star_k24132.cpp"
+        - description: -|
+            入力画像 `sample.jpg` に含まれる複数の図形のうち、星形の輪郭だけを自動で検出し、白色の線で描画せよ。
+        - input:
+            - "sample.jpg"
+        - output:
+            - "09_01_star_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "輪郭を手動で指定（例: インデックスのハードコーディング）することは禁止"
+            - "輪郭の面積と周囲長から円形度を算出し、最も円形度が小さいものを星として特定する"
+            - "特定した輪郭のみを、元の入力画像上に白線で描画する"
+        - checklists:
+            - "入力画像、二値化画像、出力画像の3つのウィンドウが表示されている"
+            - "出力画像では、星形の図形のみに白い枠線が描画されている"
+            - "他の図形には枠線が描画されていない"
+            - "コンソールに各輪郭の面積、周長、円形度が出力されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::cvtColor"
+            - "cv::threshold"
+            - "cv::findContours"
+            - "cv::arcLength"
+            - "cv::contourArea"
+            - "cv::drawContours"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "std::vector"
+            - "std::transform"
+            - "std::for_each"
+            - "std::min_element"
+            - "printf"
+        - note: -|
+            円形度を用いて星形を特定するのは、課題のヒントで提示された一例である 。
+    - a2:
+        - sourceName: "09_02_rectangle_k24132.cpp"
+        - description: -|
+            領域特徴量を用いて、`sample.jpg` 内の特定の入れ子になった矩形領域を塗りつぶせ。外側の矩形を白、内側の矩形をマゼンタで塗りつぶすこと。この処理は、90度回転した `sample_rotate.jpg` に対しても、プログラムの変更なしに同様に機能しなければならない。
+        - input:
+            - "sample.jpg"
+            - "sample_rotate.jpg"
+        - output:
+            - "09_02_rectangle-1_学籍番号.jpg"
+            - "09_02_rectangle-2_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "領域特徴量（円形度、面積、外接矩形の幅・高さなど）を用いて、対象の2つの矩形を特定する"
+            - "特定した領域のうち、大きい方を白で塗りつぶす"
+            - "小さい方をマゼンタ（R:255, G:0, B:255）で塗りつぶす"
+            - "塗りつぶしには、`drawContours` 関数の線幅を-1に設定する"
+            - "プログラムは画像の回転に対して不変であること"
+        - checklists:
+            - "`sample.jpg` と `sample_rotate.jpg` の両方に対して正しく動作する"
+            - "出力画像では、対象の大きな矩形が白で、その内部の小さな矩形がマゼンタで塗りつぶされている"
+            - "他の図形は元の色のままである"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::cvtColor"
+            - "cv::threshold"
+            - "cv::findContours"
+            - "cv::arcLength"
+            - "cv::contourArea"
+            - "cv::boundingRect"
+            - "cv::drawContours"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::Rect"
+            - "std::vector"
+            - "std::transform"
+            - "std::copy_if"
+            - "std::sort"
+            - "std::make_pair"
+            - "std::cout"
+            - "std::endl"
+            - "printf"
+        - note: -|
+            この課題は提出自由の加点対象である 。
+- l10:
+    - a1:
+        - sourceName: "10_k24132.cpp"
+        - description: -|
+            与えられた4つの図形（円2つ、T字、入れ子矩形）のうち、円形でない2つのオブジェクトを識別し、それぞれ異なる色で塗りつぶせ。
+        - input:
+            - "issue1.jpg"
+        - output:
+            - "10_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "円形度を用いて円を識別し、処理対象から除外する"
+            - "残った2つの図形（T字と入れ子矩形）を識別する"
+            - "識別した2つの図形を、それぞれ異なる色で塗りつぶす"
+        - checklists:
+            - "出力画像では、背景と2つの円が黒いままになっている"
+            - "T字の図形が特定の色（例: マゼンタ）で塗りつぶされている"
+            - "入れ子状の矩形が、T字とは異なる別の色（例: 赤）で塗りつぶされている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::cvtColor"
+            - "cv::threshold"
+            - "cv::findContours"
+            - "cv::arcLength"
+            - "cv::contourArea"
+            - "cv::boundingRect"
+            - "cv::drawContours"
+            - "cv::dilate"
+            - "cv::erode"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::Rect"
+            - "cv::Point2f"
+            - "cv::Scalar"
+            - "std::vector"
+            - "std::transform"
+            - "std::copy_if"
+            - "std::sort"
+            - "std::for_each"
+            - "std::make_pair"
+            - "printf"
+        - note: -|
+            課題PDFに記載の手順は一例であり、円形でないオブジェクトを識別して色付けできていれば良い。
+    - a2:
+        - sourceName: "10_k24132egg.cpp"
+        - description: -|
+            卵の画像の白斑点を抽出し、そのうち面積が50画素以上のものの個数を数えよ。
+        - input:
+            - "challenge.jpg"
+        - output:
+            - "10_学籍番号egg.jpg"
+            - "10_学籍番号egg.txt"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "カラー画像をグレースケールに変換する"
+            - "閾値200で二値化し、白斑点を抽出する"
+            - "抽出した領域（輪郭）の面積を計測する"
+            - "面積が50画素以上の領域のみをカウントする"
+            - "最終的な個数をテキストファイルに出力する"
+        - checklists:
+            - "面積が50以上の白斑点のみが描画された白黒画像が生成されている"
+            - "白斑点の個数が記録されたテキストファイルが生成されている"
+            - "テキストファイルに記載された数値が、画像に描画された白斑点の数と一致する"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::cvtColor"
+            - "cv::threshold"
+            - "cv::findContours"
+            - "cv::contourArea"
+            - "cv::drawContours"
+            - "cv::Mat"
+            - "cv::Scalar"
+            - "std::vector"
+            - "std::transform"
+            - "std::copy_if"
+            - "std::for_each"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            この課題は提出自由の加点対象である。
+- l11:
+    - a1:
+        - sourceName: "11_01_handinwhite_k24132.cpp"
+        - description: -|
+            入力画像 `handinwhite.jpg` から手の領域のみを抽出し、それ以外の領域（背景やボール）を黒色で塗りつぶした画像を生成せよ。
+        - input:
+            - "handinwhite.jpg"
+        - output:
+            - "11_01_handinwhite_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "画像の判定にはHSV色空間の色相（H）の値を必ず使用する"
+            - "処理フローは BGR→HSV→領域抽出→HSV→BGR の流れを基本とする"
+            - "肌色の領域を特定するために、H、S、Vそれぞれの値の範囲を閾値として設定する"
+        - checklists:
+            - "出力画像では、手の領域のみが元の色で表示されている"
+            - "背景やボールなど、手以外の部分はすべて黒く塗りつぶされている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::cvtColor"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::forEach"
+            - "std::tuple"
+            - "std::make_tuple"
+        - note: -|
+            肌色の色相(H)は0付近に分布するため、OpenCVのHの範囲(0-179)では0-20と160-179のように、範囲が2つに分割される場合がある。
+    - a2:
+        - sourceName: "11_02_fruit_k24132.cpp"
+        - description: -|
+            入力画像 `fruit_image.jpg` に含まれる右下の青リンゴの領域を抽出し、その色を赤リンゴの色に変更せよ。
+        - input:
+            - "fruit_image.jpg"
+        - output:
+            - "11_02_fruit_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "領域抽出にはHSV色空間を用いる"
+            - "H, S, Vの値から青リンゴに該当する画素を特定し、二値画像を生成する"
+            - "二値画像から輪郭を追跡し、対象となる領域を特定する（例：面積が最大の領域）"
+            - "特定した領域の色相(H)の値を、赤リンゴに対応する値に変更する"
+        - checklists:
+            - "出力画像で、右下の青リンゴのみが赤色に変化している"
+            - "他の果物や背景の色は、元の画像のまま変更されていない"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::cvtColor"
+            - "cv::inRange"
+            - "cv::findContours"
+            - "cv::contourArea"
+            - "cv::drawContours"
+            - "cv::split"
+            - "cv::merge"
+            - "cv::Mat"
+            - "cv::Vec3b"
+            - "cv::Scalar"
+            - "std::vector"
+            - "std::transform"
+            - "std::sort"
+            - "std::cerr"
+            - "std::endl"
+        - note: -|
+            この課題は提出自由の加点対象である。
+- l12:
+    - a1:
+        - sourceName: "12_01_k24132.cpp"
+        - description: -|
+            与えられた4種類のテンプレート画像（赤丸、緑丸、星、黄丸に漢字）を用いて、入力画像から各要素を検出し、それぞれ対応する色の矩形で囲んで表示せよ。
+        - input:
+            - "gazoDora.jpg"
+            - "green.jpg"
+            - "red.jpg"
+            - "star.jpg"
+            - "yellow.jpg"
+        - output:
+            - "12_01_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "4つのテンプレートすべてについて、テンプレートマッチングを実行する"
+            - "検出した各要素を、元の入力画像の上に矩形で描画する"
+            - "矩形の色は、どのテンプレートに一致したかに応じて変えること"
+        - checklists:
+            - "出力画像には、入力画像に重ねて15個の矩形が描画されている"
+            - "各図形（赤丸、緑丸、星、黄丸）が、それぞれ対応する色の矩形で正しく囲まれている"
+            - "コンソールには、検出された各要素の位置情報が出力されている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::matchTemplate"
+            - "cv::rectangle"
+            - "cv::Mat"
+            - "cv::Point"
+            - "cv::Scalar"
+            - "cv::forEach"
+            - "std::vector"
+            - "std::transform"
+            - "std::for_each"
+            - "std::string"
+            - "std::tuple"
+            - "std::make_tuple"
+            - "std::make_pair"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            特になし
+    - a2:
+        - sourceName: "12_02_k24132.cpp"
+        - description: -|
+            入力画像とテンプレート（赤丸）をグレースケールで読み込み、テンプレートマッチングを行い、得られた類似度マップを正規化してグレースケール画像として表示せよ。
+        - input:
+            - "gazoDora.jpg"
+            - "red.jpg"
+        - output:
+            - "12_02_学籍番号.jpg"
+            - "<WINDOW_SHOW>"
+        - requirements:
+            - "入力画像とテンプレート画像は、グレースケールで読み込む"
+            - "テンプレートマッチングの手法には `cv::TM_SQDIFF_NORMED` を使用する"
+            - "結果として得られる類似度マップを、0から255の範囲に正規化して表示する"
+        - checklists:
+            - "出力は単一のグレースケール画像である"
+            - "画像には、テンプレートが一致する箇所が暗い領域として複数表示されている"
+            - "`TM_SQDIFF_NORMED` を使用しているため、最も一致度が高い部分が最も暗く（0に近く）なっている"
+        - allowedFunctions:
+            - "cv::imread"
+            - "cv::imshow"
+            - "cv::waitKey"
+            - "cv::matchTemplate"
+            - "cv::normalize"
+            - "cv::Mat"
+            - "cv::Point"
+            - "cv::Scalar"
+            - "cv::forEach"
+            - "std::tuple"
+            - "std::make_tuple"
+            - "std::make_pair"
+            - "std::cout"
+            - "std::endl"
+        - note: -|
+            特になし
